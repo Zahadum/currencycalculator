@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-1.11.2.js"/>
+		<script type="javascript">
+		$(document).ready(function(){ 'vas' });
+
+		$(function() {
+			console.log('ttt');
+			var arr = $('li'),
+			iterations = 100000;
+			console.time('Native Loop');
+			for(var z=0;z<iterations;z++){
+			var length = arr.length;
+for(var i=0; i < length; i++){
+arr[i];
+}
+}
+console.timeEnd('Native Loop');
+console.time('jQuery Each');
+for(z=0;z<iterations;z++){
+arr.each(function(i, val) {
+this;
+});
+}
+console.timeEnd('jQuery Each');
+});
+</script>
+</head>
+<body>
+
+<ul id="testList">
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<li>Item</li>
+<!-- add 50 more -->
+</ul>
+</body>
+</html>
