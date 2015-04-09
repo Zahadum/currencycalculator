@@ -1,2 +1,18 @@
-body    { padding-top:50px; }
+body {
+	background-color: #2b3e50;
+	color: #ebebeb;
+	padding-top:50px;
+}
+
 .container .jumbotron    { border-radius:40px; }
+
+.depositInput {
+	-webkit-transition:all linear 0.5s;
+	transition:all linear 0.5s;
+}
+
+.depositInput.ng-invalid {
+	color:white;
+	background-color: #EE3B3B;
+	border-color: #EE3B3B;
+}

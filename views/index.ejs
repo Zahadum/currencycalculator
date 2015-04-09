@@ -10,7 +10,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
     <script src="js/ui-bootstrap-0.12.1.js"></script>
     <script src="js/appController.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/superhero/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 
 </head> 
@@ -18,12 +18,36 @@
 
 <div class="container" ng-app="currencyCalculatorApp">
     <div ng-controller="CurrencyCalculatorCtrl">
-    Current exchange rate {{date | date:'yyyy-MM-dd HH:mm:ss'}}
-    <br/>
-    1000 YEN = {{yenToUSD | number:2}} US dollar
-    <br/>
-    1000 YEN = {{yenToCAD | number:2}} Canada dollar
+        Current exchange rate {{date | date:'yyyy-MM-dd HH:mm:ss'}}
+        <br/>
+        1000 YEN = {{yenToCAD | number:3}} Canada dollar
+        <br/>
+        1000 YEN = {{yenToUSD | number:3}} US dollar
+        <br/>
+        1000 YEN = {{yenToVND | number:3}} VND
+
+        <div style="" class="row">
+            <div class="col-xs-3 col-sm-2 col-md-2">
+                <input type="number" ng-pattern="/^\d+$/" class="form-control ng-valid ng-valid-number ng-dirty depositInput" ng-model="deposit" ng-model-options="{ getterSetter: true }" ng-change="convertAmount()"/>
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-1" style="line-height: 34px;">
+                 YEN IN
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-2">
+                <select class="form-control" ng-change="convertAmount()" ng-model="selectedItem" ng-options="currencyOption.name for currencyOption in currencyOptions"></select>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-2" style="line-height: 34px;">
+                = 
+                {{convertedAmount | number:3}} {{selectedItem.value}}
+            </div>
+
+        </div> 
     </div>
+
+    <div style="width:100px;">
+
+    </div>
+
     <!--div class="jumbotron">
         <h1>It started here</h1>
     </div-->
