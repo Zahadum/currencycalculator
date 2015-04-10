@@ -1,8 +1,12 @@
 //Controller 
 var currencyCalculatorApp = angular.module('currencyCalculatorApp',[]);
-currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,$q) {
+currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,$q,dataInitialize) {
+
 	var baseURL='http://openexchangerates.org/api/';
-	var appId = 'ab238a0d483b4746bb17057e063e27ea';
+	//this app Id is exceeded limitation
+	//var appId = 'ab238a0d483b4746bb17057e063e27ea';
+	//new app Id
+	var appId = '495cd7e009534bf887c4c914d58f7df7';
 	var lastestURL = 'latest.json';
 	var currenciesURL = 'currencies.json';
 
@@ -16,8 +20,7 @@ currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,
 	$scope.convertedAmount = 0;
 	$scope.currencyOptions = [{name:'Canadian Dollar', value:'CAD'},{name:'United States Dollar', value:'USD'},{name:'Vietnamese Dong', value:'VND'}];
 	$scope.selectedItem = $scope.currencyOptions[0];
-
-
+	$scope.graphData = {};
 	$scope.convertAmount = function() {
 		var tmp = 1;
 		console.log($scope.selectedItem);
@@ -39,49 +42,165 @@ currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,
 		}
 		$scope.convertedAmount = tmp;
 	};
-
+	var dateRangeStart = new Date();
+	var dateRangeEnd = dateRangeStart;
 	var requestURL = baseURL + lastestURL + '?app_id=' + appId;
-	var requestBasedOnDateURL = baseURL + 'historical/2015-04-09.json' + '?app_id=' + appId;
-	$http.get(requestURL).
-		success(function(data, status, headers, config){
-			$scope.latestRates = data.rates;
-			
-			console.log($scope.latestRates);
-			$scope.yenToUSD = 1000 / $scope.latestRates.JPY;
-			$scope.yenToCAD = $scope.yenToUSD * $scope.latestRates.CAD;
-			$scope.yenToVND = $scope.yenToUSD * $scope.latestRates.VND;
-			$scope.customizeYenToUSD = $scope.deposit / $scope.latestRates.JPY;
-			$scope.convertedAmount = $scope.customizeYenToUSD * $scope.latestRates.CAD;
-			console.log($scope.yenToUSD);
-		}).
-		error(function(data, status, hedaers, config){
+	var requestBasedOnDateURL1 = baseURL + 'historical/2015-03-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL2 = baseURL + 'historical/2015-02-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL3 = baseURL + 'historical/2015-01-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL4 = baseURL + 'historical/2014-12-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL5 = baseURL + 'historical/2014-11-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL6 = baseURL + 'historical/2014-10-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL7 = baseURL + 'historical/2014-09-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL8 = baseURL + 'historical/2014-08-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL9 = baseURL + 'historical/2014-07-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL10 = baseURL + 'historical/2014-06-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL11 = baseURL + 'historical/2014-05-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL12 = baseURL + 'historical/2014-04-01.json' + '?app_id=' + appId;
 
-		});
-	/*
-	$http.get(requestBasedOnDateURL).
-		success(function(data, status, headers, config){
+	$scope.ratesOfDates = [];
+
+	//
+	$scope.getRatesOfDates = function() {
+		var urls = [];
+		urls.push(requestURL);
+		urls.push(requestBasedOnDateURL12);
+		urls.push(requestBasedOnDateURL11);
+		urls.push(requestBasedOnDateURL10);
+		urls.push(requestBasedOnDateURL9);
+		urls.push(requestBasedOnDateURL8);
+		urls.push(requestBasedOnDateURL7);
+		urls.push(requestBasedOnDateURL6);
+		urls.push(requestBasedOnDateURL5);
+		urls.push(requestBasedOnDateURL4);
+		urls.push(requestBasedOnDateURL3);
+		urls.push(requestBasedOnDateURL2);
+		urls.push(requestBasedOnDateURL1);
+		
+		dataInitialize.loadDataFromUrls(urls)
+			.then(function(ratesOfDates) {
+				var results = [];
+				results = angular.fromJson(ratesOfDates);
+				$scope.latestRates = results[0].data.rates;
+				$scope.ratesDataRange = results;
+
+				$scope.yenToUSD = 1000 / $scope.latestRates.JPY;
+				$scope.yenToCAD = $scope.yenToUSD * $scope.latestRates.CAD;
+				$scope.yenToVND = $scope.yenToUSD * $scope.latestRates.VND;
+				$scope.customizeYenToUSD = $scope.deposit / $scope.latestRates.JPY;
+				$scope.convertedAmount = $scope.customizeYenToUSD * $scope.latestRates.CAD;
+				$scope.graphData = $scope.buildGraphData($scope.ratesDataRange);
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var options = {
+		    //String - A legend template
+		    scaleLineColor: "white",
+		    scaleFontColor: "white",
+
+		    showTooltips: true,
+		    multiTooltipTemplate: "<%if (datasetLabel ){%><%=datasetLabel %>: <%}%><%= value %>$",
+		    customTooltips: false,
+    // String - Template string for single tooltips
+    		tooltipTemplate: "<%if (label){%><%=label%>: <%}%><%= value %>",
+
+
+		    legendTemplate : "<ul style=\"list-style: none;width: 100px;border: 1px solid gray;\" class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"color:<%=datasets[i].strokeColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%><%}%></span></li><%}%></ul>"
+
+		};
+
+		var myLineChart = new Chart(ctx).Line($scope.graphData, options);
+		var legend = myLineChart.generateLegend();
+		var tmpEle = document.createElement('div');
+
+		var para = document.createTextNode(legend); 
+		tmpEle.innerHTML = legend;
+		//document.getElementById("myChart").parentNode.appendChild(tmpEle);
+		document.getElementById("myChart").parentNode.insertBefore(tmpEle, document.getElementById("myChart").parentNode.firstChild);
+		console.log(tmpEle)
+
+			},function(data) {
+
+			});
+	};
 	
-			console.log(data.rates);
-		}).
-		error(function(data, status, hedaers, config){
+	
 
+	//init function
+	$scope.init = function() {
+		$scope.getRatesOfDates();
+	}
+
+	//init data
+	$scope.init();
+
+	//build up rate data for chart
+	$scope.buildGraphData = function(datas) {
+		var graphData = {};
+		graphData.labels = ['2014 APR','2014 MAY','2014 JUN','2014 JUL','2014 AUG','2014 SEP','2014 OCT','2014 NOV','2014 DEC','2015 JAN','2015 FEB','2015 MAR','2015 APR'];
+		graphData.datasets = [];
+		var datasetUSD = {
+			label : 'USD',
+			fillColor : "rgba(220,220,220,0.2)",
+        	strokeColor : "#FDB45C",
+        	pointColor : "#FDB45C",
+        	pointStrokeColor : "#fff",
+        	pointHighlightFill : "#fff",
+        	pointHighlightStroke : "#FDB45C",
+        	data : []
+
+		};
+
+
+		var datasetCAD = {
+            label: "CAD",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "#5AD3D1",
+            pointColor: "#5AD3D1",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "#5AD3D1",
+            data : []
+		};
+
+		angular.forEach(datas,function(rateData) {
+			var yenToUSDTmp = 1000 / rateData.data.rates.JPY;
+			datasetUSD.data.push(yenToUSDTmp);
+			datasetCAD.data.push(yenToUSDTmp * rateData.data.rates.CAD);
+			
 		});
-	*/
-	//var promise = $http.get(requestURL);
-	//var promise2 = $http.get(requestBasedOnDateURL);
-	/*promise.then(function(result) {
-			$scope.a = result.data;
-			console.log(result);
-	});*/
-	/*$q.all({
-		x : promise,
-		y : promise2
-	}).then(function(results) {
-		$scope.x = results.x.data;
-		$scope.y = results.y.data;
-		console.log($scope.x);
-		console.log($scope.y);
-	});*/
+		graphData.datasets.push(datasetCAD);
+		graphData.datasets.push(datasetUSD);
+		
+		console.log(graphData);
+		return graphData;
+	};
 
 
+});
+
+
+//Services
+currencyCalculatorApp.service('dataInitialize', function($http, $q){
+	return {
+		loadDataFromUrls: function(urls) {
+			var deferred = $q.defer();
+			var urlCalls = [];
+			angular.forEach(urls, function(url){
+				urlCalls.push($http.get(url));
+			});
+			$q.all(urlCalls)
+			.then(
+				function(results) {
+					deferred.resolve(JSON.stringify(results))
+				},
+				function(errors) {
+					deferred.reject(errors);
+				},
+				function(updates) {
+					deferred.update(updates);
+				}
+			);				
+
+			return deferred.promise;
+		}
+	};
 });
