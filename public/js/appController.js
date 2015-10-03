@@ -45,18 +45,18 @@ currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,
 	var dateRangeStart = new Date();
 	var dateRangeEnd = dateRangeStart;
 	var requestURL = baseURL + lastestURL + '?app_id=' + appId;
-	var requestBasedOnDateURL1 = baseURL + 'historical/2015-03-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL2 = baseURL + 'historical/2015-02-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL3 = baseURL + 'historical/2015-01-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL4 = baseURL + 'historical/2014-12-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL5 = baseURL + 'historical/2014-11-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL6 = baseURL + 'historical/2014-10-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL7 = baseURL + 'historical/2014-09-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL8 = baseURL + 'historical/2014-08-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL9 = baseURL + 'historical/2014-07-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL10 = baseURL + 'historical/2014-06-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL11 = baseURL + 'historical/2014-05-01.json' + '?app_id=' + appId;
-	var requestBasedOnDateURL12 = baseURL + 'historical/2014-04-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL1 = baseURL + 'historical/2015-10-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL2 = baseURL + 'historical/2015-09-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL3 = baseURL + 'historical/2015-08-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL4 = baseURL + 'historical/2015-07-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL5 = baseURL + 'historical/2015-06-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL6 = baseURL + 'historical/2015-05-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL7 = baseURL + 'historical/2015-04-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL8 = baseURL + 'historical/2015-03-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL9 = baseURL + 'historical/2015-02-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL10 = baseURL + 'historical/2015-01-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL11 = baseURL + 'historical/2014-12-01.json' + '?app_id=' + appId;
+	var requestBasedOnDateURL12 = baseURL + 'historical/2014-11-01.json' + '?app_id=' + appId;
 
 	$scope.ratesOfDates = [];
 
@@ -135,7 +135,7 @@ currencyCalculatorApp.controller('CurrencyCalculatorCtrl',function($scope,$http,
 	//build up rate data for chart
 	$scope.buildGraphData = function(datas) {
 		var graphData = {};
-		graphData.labels = ['2014 APR','2014 MAY','2014 JUN','2014 JUL','2014 AUG','2014 SEP','2014 OCT','2014 NOV','2014 DEC','2015 JAN','2015 FEB','2015 MAR','2015 APR'];
+		graphData.labels = ['2014 NOV','2014 DEC','2015 JAN','2015 FEB','2015 MAR','2015 APR','2015 MAY','2015 JUN','2015 JUL','2015 AUG','2015 SEP','2015 OCT'];
 		graphData.datasets = [];
 		var datasetUSD = {
 			label : 'USD',
